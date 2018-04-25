@@ -55,6 +55,7 @@ RUN buildDeps=" \
 COPY docker-ocertsmgr.sh /docker/ocertsmgr.sh
 COPY cn-no-route.txt /docker/cn-no-route.txt
 COPY all-route.txt /docker/all-route.txt
+COPY my-route-*.txt /docker
 
 RUN set -x \
 	&& sed -i 's/\(max-same-clients = \)2/\110/' /docker/config/ocserv.conf \
@@ -68,6 +69,7 @@ RUN set -x \
 	&& sed -i 's/192.168.1.2/8.8.8.8/' /docker/config/ocserv.conf \
 	&& sed -i 's/^route/#route/' /docker/config/ocserv.conf \
 	&& sed -i 's/^no-route/#no-route/' /docker/config/ocserv.conf \
+	&& sed -i 's/^default-domain/#default-domain/' /docker/config/ocserv.conf \
 	&& ln -sf /docker/ocertsmgr.sh /usr/local/bin/ocertsmgr
 
 WORKDIR /etc/ocserv

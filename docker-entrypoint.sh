@@ -19,15 +19,31 @@ fi
 if [ -z "$SRV_DAYS" ]; then
 	SRV_DAYS=9999
 fi
+if [ -z "$ROUTE_PLAN" ]; then
+	ROUTE_PLAN="1"
+fi
+
+if [ ! -z "$TCP_PORT" ]; then
+	sed -i 's/^tcp-port = 443/tcp-port = '$TCP_PORT'/' /docker/config/ocserv.conf
+fi
+if [ ! -z "$UDP_PORT" ]; then
+	sed -i 's/^udp-port = 443/udp-port = '$UDP_PORT'/' /docker/config/ocserv.conf
+fi
+
+if [ ! -z "$DEFAULT_DOMAIN"]; then
+	sed -i 's/#default-domain = example.com/default-domain = '$DEFAULT_DOMAIN'/' /docker/config/ocserv.conf
+fi 
 
 #Check config files
 if [ ! -f /etc/ocserv/ocserv.conf ]; then
 	rm -rf /etc/ocserv/ocserv.conf
 	cp /docker/config/ocserv.conf /etc/ocserv/ocserv.conf
-	if [ -z "$ROUTE_ALL" ]; then
+	if [ $ROUTE_PLAN == "1" ]; then
 		cat /docker/cn-no-route.txt >> /etc/ocserv/ocserv.conf
-	else
+	elif [ $ROUTE_PLAN == "2" ]; then
 		cat /docker/all-route.txt >> /etc/ocserv/ocserv.conf
+	else
+		cat /docker/my-route-$ROUTE_PLAN.txt >> /etc/ocserv/ocserv.conf
 	fi
 fi
 
