@@ -30,6 +30,10 @@ if [ ! -z "$UDP_PORT" ]; then
 	sed -i 's/^udp-port = 443/udp-port = '$UDP_PORT'/' /docker/config/ocserv.conf
 fi
 
+if [ ! -z "$DNS" ]; then
+        sed -i 's/^dns = 8.8.8.8/dns = '$DNS'/' /docker/config/ocserv.conf
+fi
+
 if [ ! -z "$DEFAULT_DOMAIN"]; then
 	sed -i 's/#default-domain = example.com/default-domain = '$DEFAULT_DOMAIN'/' /docker/config/ocserv.conf
 fi 
