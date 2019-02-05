@@ -2,7 +2,7 @@ FROM alpine:3.7
 
 MAINTAINER XiangJL <xjl-tommy@qq.com>
 
-ENV OC_VERSION=0.11.11
+ENV OC_VERSION=0.12.2
 
 RUN buildDeps=" \
 		curl \
@@ -26,7 +26,6 @@ RUN buildDeps=" \
 	&& apk add --update --virtual .build-deps $buildDeps \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz.sig" -o ocserv.tar.xz.sig \
-	&& gpg --keyserver pgp.mit.edu --recv-key 7F343FA7 \
 	&& gpg --keyserver pgp.mit.edu --recv-key 96865171 \
 	&& gpg --verify ocserv.tar.xz.sig \
 	&& mkdir -p /usr/src/ocserv \
@@ -70,6 +69,7 @@ RUN set -x \
 	&& sed -i 's/^route/#route/' /docker/config/ocserv.conf \
 	&& sed -i 's/^no-route/#no-route/' /docker/config/ocserv.conf \
 	&& sed -i 's/^default-domain/#default-domain/' /docker/config/ocserv.conf \
+	&& sed -i '/\[vhost:www.example.com\]/,$d' /docker/config/ocserv.conf \
 	&& ln -sf /docker/ocertsmgr.sh /usr/local/bin/ocertsmgr
 
 WORKDIR /etc/ocserv
