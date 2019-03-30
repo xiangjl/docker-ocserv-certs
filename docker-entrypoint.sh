@@ -103,8 +103,8 @@ iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 # Enable TUN device
 mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
-chown root:netdev /dev/net/tun
-chmod 660 /dev/net/tun
+chown root:root /dev/net/tun
+chmod 666 /dev/net/tun
 
 # Run OpennConnect Server
 exec "$@"
